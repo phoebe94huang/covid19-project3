@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COVID-19 Cases by Country</title>
+    <link href='https://fonts.googleapis.com/css?family=Short Stack' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Delius Unicase' rel='stylesheet'>
+    <style>
+        body {
+            background-color: PaleTurquoise;
+            color: Black;
+            text-align: center;
+            font-size: 14px;
+            font-family: 'Short Stack';
+        }
+        h2 {
+            font-size: 20px;
+            font-family: 'Delius Unicase';
+        }
+        h3 {
+            font-size: 17px;
+            font-family: 'Delius Unicase';
+        }
+        h3.total {
+            font-size: 18px;
+            font-family: 'Short Stack';
+        }
+        h5 {
+            font-size: 13px;
+            font-weight: normal;
+        }
+        #townLookup {
+            width: 95%;
+            font-size: 14px;
+            padding: 8px 8px 8px 8px;
+            border: 2px solid #ddd;
+            margin-bottom: 8px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            border: 2px solid Black;
+        }
+        th, td {
+            border: 2px solid Black;
+            text-align: center;
+            padding: 8px;
+            width: 50%;
+        }
+        th {
+            font-size: 15px;
+            font-family: 'Delius Unicase';
+        }
+        td {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        tr {
+            border: 2px solid Black;
+        }
+        tr:nth-child(odd) {
+            background-color: Aquamarine;
+        }
+        .navbar {
+            background-color: GhostWhite;
+            letter-spacing: 2px;
+            padding: 8px;
+            text-transform: lowercase;
+            font-size: 15px;
+            font-family: 'Delius Unicase';
+        }
+        a:link, a:visited {
+            color: DeepPink;
+            text-decoration: none;
+        }
+        a:hover {
+            color: PaleTurquoise;
+            text-decoration: none;
+            font-style: italic;
+        }
+        .column {
+            float: left;
+            width: 50%;
+        }
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .source a:hover {
+            color: Aquamarine;
+        }
+        #banner {
+            margin: 20px 0px 10px 0px;
+        }
+    </style>
+<body>
+<img id = "banner" src="{{url_for('static', filename='project3banner.png')}}">
+    <p>
+        <div class = "navbar">
+            <a href = "/">Number of Cases</a> |
+            <a href = "/info">COVID-19 Info</a> |
+            <a href = "/testing">Where to Go</a> |
+            <a href = "/contact">Who to Contact</a> |
+            <a href = "/otherplaces">Worldwide Cases</a>
+        </div>
+    </p>
+<h2>How is the rest of the world dealing with COVID-19?</h2>
+<h3 class = "total"><u>Worldwide Total:</u> {{worldwideTotal}}</h3>
+<center>
+    <table id = "myTable">
+        <caption><h3>{{title}}</h3></caption>
+        <tr>
+            <th onclick="sortTable(0)">Country <img src="{{url_for('static', filename='sortingarrows.png')}}"></th>
+            <th>Cases</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>{{row['country']}}</td>
+            <td>{{row['cases']}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h5>*Data is as of {{date}}</h5>
+    <div class="source">
+        <h5>Source: <a href = "https://www.cnn.com/interactive/2020/health/coronavirus-maps-and-cases/" target="_blank">{{source}}</a></h5>
+    </div>
+</center>
+<script>
+// code credit: w3schools
+function sortTable(n) {
+    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+    table = document.getElementById("myTable");
+    switching = true;
+    dir = "asc";
+    while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {
+            shouldSwitch = false;
+            x = rows[i].getElementsByTagName("TD")[n];
+            y = rows[i + 1].getElementsByTagName("TD")[n];
+            if (dir == "asc") {
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch= true;
+                    break;
+                }
+            }
+            else if (dir == "desc") {
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+        }
+        if (shouldSwitch) {
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+            switchcount ++;
+        }
+        else {
+            if (switchcount == 0 && dir == "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+}
+</script>
+</body>
+</html>

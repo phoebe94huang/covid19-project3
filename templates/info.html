@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COVID-19 Information</title>
+    <link href='https://fonts.googleapis.com/css?family=Short Stack' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Delius Unicase' rel='stylesheet'>
+    <style>
+        body {
+            background-color: PaleTurquoise;
+            color: Black;
+            text-align: center;
+            font-size: 14px;
+            font-family: 'Short Stack';
+        }
+        h3 {
+            font-size: 17px;
+            font-family: 'Delius Unicase';
+        }
+        h5 {
+            font-size: 13px;
+            font-weight: normal;
+        }
+        ul.info {
+            list-style-type: square;
+            text-align: left;
+        }
+        table {
+            border-collapse: collapse;
+            border: 2px solid Black;
+            margin-bottom: 16px;
+            width: 75%;
+        }
+        th, td {
+            border: 2px solid Black;
+            text-align: center;
+        }
+        th {
+            font-size: 15px;
+            font-family: 'Delius Unicase';
+        }
+        td {
+            font-family: Arial, Helvetica, sans-serif;
+            padding-right: 30px;
+        }
+        tr {
+            border: 2px solid Black;
+        }
+        tr:nth-child(odd) {
+            background-color: Aquamarine;
+        }
+        .navbar {
+            background-color: GhostWhite;
+            letter-spacing: 2px;
+            padding: 8px;
+            text-transform: lowercase;
+            font-size: 15px;
+            font-family: 'Delius Unicase';
+        }
+        a:link, a:visited {
+            color: DeepPink;
+            text-decoration: none;
+        }
+        a:hover {
+            color: PaleTurquoise;
+            text-decoration: none;
+            font-style: italic;
+        }
+        .translate {
+            font-family: 'Short Stack';
+        }
+        .translate a:hover {
+            color: Aquamarine;
+        }
+        .column {
+            float: left;
+            width: 33%;
+        }
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .source a:hover {
+            color: Aquamarine;
+        }
+        #banner {
+            margin: 20px 0px 10px 0px;
+        }
+    </style>
+</head>
+<body>
+<img id = "banner" src="{{url_for('static', filename='project3banner.png')}}">
+    <p>
+        <div class = "navbar">
+            <a href = "/">Number of Cases</a> |
+            <a href = "/info">COVID-19 Info</a> |
+            <a href = "/testing">Where to Go</a> |
+            <a href = "/contact">Who to Contact</a> |
+            <a href = "/otherplaces">Worldwide Cases</a>
+        </div>
+    </p>
+<p>
+    <div class = "translate">
+        <a href = "/info">English</a> | <a href = "/mandarin">繁體中文</a>
+    </div>
+</p>
+<h3>{{title}}</h3>
+    <div class="source">
+        <h5>Source: <a href = "https://www.cdc.gov/coronavirus/2019-nCoV/index.html" target="_blank">{{source}}</a></h5>
+    </div>
+    <div class = "column">
+        <h3>Symptoms</h3>
+        <center>
+            <p>{{symptomInfo}}<p>
+            <table>
+                {% for symptoms in data %}
+                <tr>
+                    <td>
+                        <ul class = "info">
+                            <li>{{symptoms}}</li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </center>
+    </div>
+    <div class = "column">
+        <h3>Protect yourself</h3>
+        <center>
+            <p>{{protectInfo}}</p>
+            <table>
+                {% for protect in data2 %}
+                <tr>
+                    <td>
+                        <ul class = "info">
+                            <li>{{protect}}</li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </center>
+    </div>
+    <div class = "column">
+        <h3>How it spreads</h3>
+        <center>
+            <p>{{spreadInfo}}</p>
+            <table>
+                {% for spread in data3 %}
+                <tr>
+                    <td>
+                        <ul class = "info">
+                            <li>{{spread}}</li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </center>
+    </div>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bergen County COVID-19 Cases</title>
+    <link href='https://fonts.googleapis.com/css?family=Short Stack' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Delius Unicase' rel='stylesheet'>
+    <style>
+        body {
+            background-color: PaleTurquoise;
+            color: Black;
+            text-align: center;
+            font-size: 14px;
+            font-family: 'Short Stack';
+        }
+        h3 {
+            font-size: 17px;
+            font-family: 'Delius Unicase';
+        }
+        h5 {
+            font-size: 13px;
+            font-weight: normal;
+        }
+        #townLookup {
+            width: 95%;
+            font-size: 14px;
+            padding: 8px 8px 8px 8px;
+            border: 2px solid #ddd;
+            margin-bottom: 8px;
+        }
+        #casesTable {
+            border-collapse: collapse;
+            width: 67%;
+            border: 2px solid Black;
+        }
+        #casesTable th, #casesTable td {
+            border: 2px solid Black;
+            text-align: center;
+            padding: 8px;
+            width: 50%;
+        }
+        #casesTable th {
+            font-size: 15px;
+            font-family: 'Delius Unicase';
+        }
+        #casesTable td {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #casesTable tr {
+            border: 2px solid Black;
+        }
+        #casesTable tr:nth-child(odd) {
+            background-color: Aquamarine;
+        }
+        .navbar {
+            background-color: GhostWhite;
+            letter-spacing: 2px;
+            padding: 8px;
+            text-transform: lowercase;
+            font-size: 15px;
+            font-family: 'Delius Unicase';
+        }
+        a:link, a:visited {
+            color: DeepPink;
+            text-decoration: none;
+        }
+        a:hover {
+            color: PaleTurquoise;
+            text-decoration: none;
+            font-style: italic;
+        }
+        .column {
+            float: left;
+            width: 50%;
+        }
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .source a:hover {
+            color: Aquamarine;
+        }
+        #banner {
+            margin: 20px 0px 10px 0px;
+        }
+    </style>
+</head>
+<body>
+<img id = "banner" src="{{url_for('static', filename='project3banner.png')}}">
+    <p>
+        <div class = "navbar">
+            <a href = "/">Number of Cases</a> |
+            <a href = "/info">COVID-19 Info</a> |
+            <a href = "/testing">Where to Go</a> |
+            <a href = "/contact">Who to Contact</a> |
+            <a href = "/otherplaces">Worldwide Cases</a>
+        </div>
+    </p>
+<p>With over 100,000 cases of coronavirus, New Jersey has been the second hardest hit state during this pandemic, only behind New York.<br>
+Bergen County in northern New Jersey has consistently had the highest number of cases in the state, and is widely considered to be NJ's "ground zero".<br>
+The purpose of this website is to inform the residents of Bergen County where the cases are in our wonderful community.</p>
+<center>
+    <div class = "column">
+        <table id = "casesTable">
+            <caption>
+                <h3>{{title}}</h3>
+                <p>
+                    <input type="text" id="townLookup" onkeyup="searchTown()" placeholder="Search for town" title="Type in a town">
+                </p>
+            </caption>
+            <tr>
+                <th>Municipality</th>
+                <th>Number of cases</th>
+            </tr>
+            {% for row in data %}
+            <tr>
+                <td>{{row['town']}}</td>
+                <td>{{row['cases']}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><strong>Bergen County Total</strong></td>
+                <td><strong>{{totalCases}}</strong></td>
+            </tr>
+            <tr>
+                <td><strong>New Jersey Total</strong></td>
+                <td><strong>{{totalNJ}}</strong></td>
+            </tr>
+        </table>
+        <h5>*Data is as of {{date}}</h5>
+        <h5>**Disclaimer: data may not reflect the actual number of cases. The amount of positive COVID-19 cases may be higher than what is being reported due to insufficient and the lack of testing. Please remember to keep social distancing!</h5>
+        <div class="source">
+            <h5>Source: <a href = "https://www.co.bergen.nj.us" target="_blank">{{source}}</a></h5>
+        </div>
+    </div>
+    <div class = "column">
+        <p>
+            <h3>Important social media updates</h3>
+        </p>
+        <p>
+            <a class="twitter-timeline" data-width="300" data-height="375" data-theme="dark" href="https://twitter.com/NJDeptofHealth?ref_src=twsrc%5Etfw">Tweets by NJDeptofHealth</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </p>
+        <p>
+            <a class="twitter-timeline" data-width="300" data-height="375" data-theme="dark" href="https://twitter.com/NJGov?ref_src=twsrc%5Etfw">Tweets by NJGov</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </p>
+        <p>
+            <a class="twitter-timeline" data-width="300" data-height="375" data-theme="dark" href="https://twitter.com/GovMurphy?ref_src=twsrc%5Etfw">Tweets by Governor Murphy</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </p>
+        <p>
+            <a class="twitter-timeline" data-width="300" data-height="375" data-theme="dark" href="https://twitter.com/CDCGov?ref_src=twsrc%5Etfw">Tweets by the CDC</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </p>
+    </div>
+</center>
+<script>
+// code credit: w3schools
+function searchTown() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("townLookup");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("casesTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[0];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+</script>
+</body>
+</html>
